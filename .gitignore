@@ -8,7 +8,7 @@ __pycache__/
 *.log
 
 # Virtual environment
-.venv/
+venv/
 
 # FastAPI specific
 .fastapi/

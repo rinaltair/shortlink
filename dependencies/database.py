@@ -1,12 +1,11 @@
 import asyncio
 
-import sqlalchemy
 from sqlalchemy.exc import SQLAlchemyError
 from asyncio import TimeoutError
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, AsyncEngine
 from sqlalchemy.orm import sessionmaker
 
-from src.configs.settings import settings
+from configs.settings import settings
 
 engine = create_async_engine(
     settings.DB_CONFIG,

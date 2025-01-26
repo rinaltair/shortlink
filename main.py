@@ -1,8 +1,6 @@
-import logging
-
 from fastapi import FastAPI
 
-from src.dependencies.database import check_database_connection, engine
+from dependencies.database import check_database_connection, engine
 
 
 # from fastapi.logger import logger as fastapi_logger

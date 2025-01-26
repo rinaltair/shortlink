@@ -21,22 +21,12 @@ AsyncSessionLocal = sessionmaker(
     expire_on_commit=False  # Prevent attributes from expiring after commit
 )
 
-async def check_database_connection(engine: AsyncEngine) -> bool:
+async def check_database_connection(engine: AsyncEngine) -> None:
     try:
-        async with engine.connect() as connection:
-            # Connection is established, return True
-            return True
+        async with engine.connect():
+            # Connection is established
+            print("Connected to the database")
     except (Exception, TimeoutError, SQLAlchemyError) as e:
-        # Connection failed, log the error and return False
-        print(f"Database connection error: {e}")
-        return False
-
-async def main():
-    is_connected = await check_database_connection(engine)
-    if is_connected:
-        print("Connected to the database")
-    else:
+        # Connection failed, log the error
         print("Failed to connect to the database")
-
-if __name__ == "__main__":
-    asyncio.run(main())
+        print(f"Database connection error: {e}")

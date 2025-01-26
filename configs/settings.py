@@ -14,4 +14,4 @@ class Settings(BaseSettings):
         env_file_encoding = "utf-8"
 
 
-settings = Settings(_env_file=".env")  # Load values from .env file
+settings = Settings()  # Load values from .env file

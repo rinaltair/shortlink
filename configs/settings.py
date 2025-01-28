@@ -6,7 +6,7 @@ load_dotenv()  # Load environment variables from .env file
 
 class Settings(BaseSettings):
     DB_CONFIG: str
-    shortcode_length: int = 6
+    shortlink_length: int = 6
     URL_BASE: str
 
     class Config:

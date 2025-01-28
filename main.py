@@ -14,6 +14,10 @@ def init_app():
     async def startup():
         await check_database_connection(engine)
 
+    @app.on_event('shutdown')
+    async def shutdown():
+        await engine.dispose()
+
     return app
 
 

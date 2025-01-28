@@ -1,17 +1,20 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Optional
 
-import pytz
 from sqlalchemy import DateTime, TypeDecorator
 from sqlalchemy.engine import Dialect
 
 __all__ = ["Datetime"]
 
 class Datetime(TypeDecorator):
+    """
+    A SQLAlchemy TypeDecorator for handling datetime values with timezone information.
+    Ensures that datetime values are stored in UTC and retrieved with UTC timezone information.
+    """
     impl = DateTime
     cache_ok = True
 
-    def process_bind_param(self, value: Optional[datetime], dialect: Dialect) -> Any:
+    def process_bind_param(self, value: Optional[datetime], dialect: Dialect) -> Optional[datetime]:
         """
         Process a datetime value before binding it to a database parameter.
 
@@ -23,12 +26,12 @@ class Datetime(TypeDecorator):
         :return: The processed datetime value with timezone information removed, or None.
         """
         if value is not None:
-            if value.tzinfo is not None and value.tzinfo != pytz.utc:
-                value = value.astimezone(pytz.utc)
+            if value.tzinfo is not None and value.tzinfo != timezone.utc:
+                value = value.astimezone(timezone.utc)
             value = value.replace(tzinfo=None)
         return value
 
-    def process_result_value(self, value: Optional[datetime], dialect: Dialect) -> Any:
+    def process_result_value(self, value: Optional[datetime], dialect: Dialect) -> Optional[datetime]:
         """
         Process a datetime value when fetching it from a database result.
 
@@ -42,5 +45,14 @@ class Datetime(TypeDecorator):
         :return: The processed datetime value with timezone information, or None.
         """
         if value is not None:
-            return value.astimezone(pytz.utc).replace(tzinfo=pytz.utc)
+            return value.replace(tzinfo=timezone.utc)
         return value
+
+
+    def __repr__(self) -> str:
+        """
+        Return a string representation of the Datetime object.
+
+        :return: A string representation showing the implementation type.
+        """
+        return f"<Datetime(impl={self.impl})>"

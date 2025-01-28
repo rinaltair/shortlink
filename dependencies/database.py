@@ -30,3 +30,7 @@ async def check_database_connection(engine: AsyncEngine) -> None:
         # Connection failed, log the error
         print("Failed to connect to the database")
         print(f"Database connection error: {e}")
+
+async def get_db():
+    async with AsyncSessionLocal() as session:
+        yield session

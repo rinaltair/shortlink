@@ -33,15 +33,15 @@ class UrlUpdate(BaseModel):
 
 class UrlResponse(BaseModel):
     # For API Response
-    id: UUID
+    id: str
     title: str
     original_url: str
     shortlink: str
     clicks: int = 0
     is_active: bool
-    created_at: datetime
-    updated_at: datetime
+    created_at: str
+    updated_at: str
 
     @computed_field
     def short_url(self) -> str:  # For Generating the full short url, i just need to  save the code
-        return f"{settings.URL_BASE}/{self.shortlink}"
+        return f"{settings.URL_BASE}{self.shortlink}"

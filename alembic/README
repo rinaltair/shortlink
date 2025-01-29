@@ -1,1 +1,7 @@
 Generic single-database configuration with an async dbapi.
+
+
+alembic init alembic
+alembic revision --autogenerate -m "your_message_here"
+alembic upgrade head
+

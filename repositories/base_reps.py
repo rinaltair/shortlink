@@ -1,3 +1,4 @@
+import logging
 from abc import abstractmethod
 from typing import TypeVar, Generic
 from uuid import UUID
@@ -74,6 +75,7 @@ class BaseRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             return db_obj
         except Exception as e:
             await self.session.rollback()
+            logging.error(f"Failed to create record: {e}")
             raise self._translate_exception(e)
 
     async def update(self, id: UUID, obj_in: UpdateSchemaType) -> ModelType:

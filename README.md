@@ -17,22 +17,21 @@ This project is a backend API for creating and managing shortlinks using FastAPI
 ## Project Structure
 
     .
-    ├── alembic/ # Database migrations directory
-    ├── configs/ # Configuration files
-    ├── dependencies/ # Dependency injection and database connection
-    ├── models/ # Database models
-    ├── repositories/ # Data access layer
-    ├── routers/ # API route definitions
-    │ ├── endpoints/ # Specific endpoint routes
-    ├── schemas/ # Pydantic models for request and response validation
-    ├── services/ # Business logic and service layer
-    ├── utils/ # Utility functions and helpers
-    ├── .env.example # Example environment configuration file
-    ├── .gitignore # Git ignore file
-    ├── main.py # Main application entry point
-    ├── requirements.txt # Project dependencies
+    ├── alembic/            # Database migrations directory
+    ├── configs/            # Configuration files
+    ├── dependencies/       # Dependency injection and database connection
+    ├── models/             # Database models
+    ├── repositories/       # Data access layer
+    ├── routers/            # API route definitions
+    │ ├── endpoints/        # Specific endpoint routes
+    ├── schemas/            # Pydantic models for request and response validation
+    ├── services/           # Business logic and service layer
+    ├── utils/              # Utility functions and helpers
+    ├── .env.example        # Example environment configuration file
+    ├── .gitignore          # Git ignore file
+    ├── main.py             # Main application entry point
+    ├── requirements.txt    # Project dependencies
     └── README.md
-
 
 ## Getting Started
 

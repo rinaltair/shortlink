@@ -11,14 +11,16 @@ class UrlCreate(BaseModel):
     # What user can create
     title: Optional[str] = Field(None, max_length=100)
     original_url: HttpUrl
-    shortlink: Optional[str] = Field(None, min_length=8, max_length=100, pattern="^[a-zA-Z0-9]*$")
+    shortlink: Optional[str] = Field(None, min_length=4, max_length=100, pattern="^[a-zA-Z0-9]*$")
 
-    @field_validator("shortlink")
-    def validate_shortlink(cls, shortlink):
-        if shortlink:  # Only validate if provided
-            if len(shortlink) < 8: raise ValueError("Shortcode must be at least 8 characters")
-            if Shortlink.validate(shortlink): raise ValueError("Only letters, numbers, underscores and hyphens allowed")
-        return shortlink
+    @model_validator(mode='after')
+    def validate_shortlink(cls, values):
+        shortlink = values.shortlink
+        if shortlink is not None:  # Only validate if provided
+            if len(shortlink) < 4: raise ValueError("Shortcode must be at least 4 characters")
+            if not Shortlink.validate(shortlink): raise ValueError("Only letters, numbers, underscores and hyphens allowed")
+        else: shortlink = None
+        return values 
 
 
 class UrlUpdate(BaseModel):

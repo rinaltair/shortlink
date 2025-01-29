@@ -5,12 +5,17 @@ from routers import router
 from exceptions import (http, lookup,value,generic, request)
 
 def init_app():
-
     """
         This is a Skeleton for backend with FastAPI.
     """
-
-    app = FastAPI()
+    app = FastAPI(
+        title="Shortlink API",
+        description="API for creating and managing shortlinks.",
+        version="1.0.0",
+        openapi_url="/api/openapi.json",
+        docs_url="/api/docs",
+        redoc_url="/api/redoc",
+    )
 
     @app.on_event('startup')
     async def startup():

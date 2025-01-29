@@ -45,7 +45,7 @@ This project is a backend API for creating and managing shortlinks using FastAPI
 1. Clone the repository:
 
     ```sh
-    git clone https://github.com/your-username/shortlink-api.git
+    git clone https://github.com/rinaltair/shortlink-api.git
     cd shortlink-api
     ```
 

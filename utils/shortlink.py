@@ -12,4 +12,4 @@ class Shortlink:
     @staticmethod
     def validate(shortlink: str) -> bool:
         """Validate the shortlink format."""
-        return all(not shortlink.isalnum() and '_' not in shortlink and '-' not in shortlink)
+        return all(c.isalnum() or c in {'_', '-'} for c in shortlink)

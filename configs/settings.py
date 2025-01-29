@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     DB_CONFIG: str
     shortlink_length: int = 6
     URL_BASE: str
-
+    RESTRICTED_SHORTLINK: list[str] = ['api', 'auth']
 
     class Config:
         env_file = ".env"

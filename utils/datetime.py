@@ -55,4 +55,4 @@ class Datetime(TypeDecorator):
 
         :return: A string representation showing the implementation type.
         """
-        return f"<Datetime(impl={self.impl})>"
+        return "Datetime()"  # ✅ Returns a string like "Datetime()"

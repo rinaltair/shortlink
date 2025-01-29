@@ -39,7 +39,7 @@ class UrlRepositories(BaseRepository[Url, UrlCreate, UrlUpdate]):
         )
         return result.scalars().first()
 
-    async def increment_clicks(self, shortlink: str) -> Optional[Url]:
+    async def increment_clicks(self, url: Url) -> Optional[Url]:
         """
         Atomic click counter increment
         Args:
@@ -47,7 +47,6 @@ class UrlRepositories(BaseRepository[Url, UrlCreate, UrlUpdate]):
         Returns:
             Updated Url instance or None if not found
         """
-        url = await self.get_by_shortlink(shortlink)
         if url:
             url.clicks += 1
             self.session.add(url)

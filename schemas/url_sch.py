@@ -1,8 +1,8 @@
-import datetime
+from datetime import datetime  # Import datetime from the datetime module
 from typing import Optional
 from uuid import UUID
 
-from pydantic import BaseModel, HttpUrl, Field, computed_field, field_validator
+from pydantic import BaseModel, HttpUrl, Field, computed_field, model_validator
 
 from configs.settings import settings
 from utils import Shortlink

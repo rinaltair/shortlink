@@ -1,11 +1,12 @@
 import logging
 from uuid import UUID
 
+from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from models import User
 from repositories import UserRepositories
-from schemas.user_sch import UserCreate, UserResponse
+from schemas.user_sch import UserCreate, UserResponse, UserUpdate
 from utils.password import Password
 
 logger = logging.getLogger(__name__)
@@ -52,6 +53,24 @@ class UserService:
             logger.error(f"Failed to get user: {e}")
             raise
 
+    async def update_user(self, id: UUID, data: UserUpdate):
+        """Update an existing User with the given data."""
+        try:
+            user = await self.reps.get(id)
+            if not user: raise LookupError('User not found')
+
+            user.username = data.username \
+                if user.username == data.username \
+                else await self._unique_username_handler(data.username)
+            user.email = user.email \
+                if user.email == data.email \
+                else await self._unique_email_handler(data.email)
+            user.password_hash = Password.hash_pwd(data.password)
+            await self.reps.update(id, user)
+            return await self._build_response(user)
+        except Exception as e:
+            logger.error(f"Failed to update user: {e}")
+            raise e
 
     async def _unique_email_handler(self, email: EmailStr | str) -> str:
         """Check if the username or email already exists in the database."""

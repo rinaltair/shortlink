@@ -26,7 +26,7 @@ class UserRepositories(BaseRepository[User, UserCreate, UserUpdate], ABC):
         result = await self.session.execute(query)
         return result.scalars().first()
 
-    async def get_by_email(self, email: EmailStr) -> Optional[User]:
+    async def get_by_email(self, email: EmailStr | str) -> Optional[User]:
         """
         Get User by email
         Args:

@@ -14,9 +14,9 @@ class UserBase(SQLModel):
 
 class UserFull(UserBase, Base):
     # Manage by the systems, like relationship
-    role: Optional[str] = Field(default=None)
+    role: Optional[str] = Field(default=None, nullable=True)
     password_hash: Optional[str] = Field(default=None, nullable=False)
-
+    is_active: Optional[bool] = Field(default=True, nullable=False)
 
 class User(UserFull, table=True):
     pass

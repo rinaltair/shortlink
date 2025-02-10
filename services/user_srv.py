@@ -1,4 +1,5 @@
 import logging
+from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -13,7 +14,6 @@ logger = logging.getLogger(__name__)
 class UserService:
     def __init__(self, session: AsyncSession):
         self.reps = UserRepositories(session)
-        self.max_retries = 4
 
     async def create_user(self, data: UserCreate):
         """Create a new User."""
@@ -38,6 +38,17 @@ class UserService:
             return result
         except Exception as e:
             raise e
+
+    async def get_by_id(self, id: UUID):
+        """Get the full data of a User based on the given ID."""
+        try:
+            result = await self.reps.get(id)
+            if not result:
+                raise LookupError('User not found')
+            return await self._build_response(result)
+        except Exception as e:
+            raise
+
 
     async def _unique_handler(self, data: UserCreate) -> UserCreate:
         """Check if the username or email already exists in the database."""

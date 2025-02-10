@@ -1,4 +1,5 @@
 from typing import Optional
+from uuid import UUID
 
 from fastapi import APIRouter, Query, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -33,3 +34,13 @@ async def get_all_users(
     service = UserService(db)
     result = await service.get_all(skip, limit, filters)
     return Response(data=result, message="Users retrieved successfully")
+
+@router.get("/{id}", response_model=Response, status_code=status.HTTP_200_OK)
+async def get_user_by_id(
+        id: UUID,
+        db: AsyncSession = Depends(get_db)
+):
+    """Get the full data of a User based on the given ID."""
+    service = UserService(db)
+    result = await service.get_by_id(id)
+    return Response(data=result, message="User retrieved successfully")

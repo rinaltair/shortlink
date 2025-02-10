@@ -72,6 +72,16 @@ class UserService:
             logger.error(f"Failed to update user: {e}")
             raise e
 
+    async def delete_user(self, id: UUID):
+        """Delete a User based on the given ID."""
+        try:
+            user = await self.reps.get(id)
+            if not user: raise LookupError('User not found')
+            await self.reps.delete(id)
+        except Exception as e:
+            logger.error(f"Failed to delete user: {e}")
+            raise
+
     async def _unique_email_handler(self, email: EmailStr | str) -> str:
         """Check if the username or email already exists in the database."""
         if await self.reps.get_by_email(email):

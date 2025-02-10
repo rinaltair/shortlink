@@ -58,3 +58,14 @@ async def update_user(
     service = UserService(db)
     result = await service.update_user(id, data)
     return Response(data=result, message="User updated successfully")
+
+
+@router.post("/{id}/delete", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_url(
+        id: UUID,
+        db: AsyncSession = Depends(get_db)
+):
+    """Delete a shortlink based on the given ID."""
+    service = UserService(db)
+    await service.delete_user(id)
+    # return Response(message="Shortlink deleted successfully")

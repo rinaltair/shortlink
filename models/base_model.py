@@ -1,13 +1,12 @@
 from datetime import datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import Column
 from sqlalchemy.orm import declared_attr
-from sqlmodel import Field
+from sqlmodel import Field, Column
 from sqlmodel import SQLModel as _SQLModel
 from stringcase import snakecase
 
-from utils.datetime import Datetime  # Ensure this import is correct
+from utils.datetime import DateTime  # Ensure this import is correct
 
 class SQLModel(_SQLModel):
     @declared_attr  # type: ignore
@@ -15,8 +14,10 @@ class SQLModel(_SQLModel):
         return snakecase(cls.__name__)
 
 class Base(SQLModel):
-    id: UUID = Field(default_factory=uuid4, primary_key=True, index=True)
-    created_at: datetime | None = Field(default_factory=datetime.now, sa_column=Column(Datetime(), nullable=False))
-    updated_at: datetime | None = Field(default_factory=datetime.now, sa_column=Column(Datetime(), nullable=False, onupdate=datetime.utcnow))
+    class Config:
+        arbitrary_types_allowed = True
+        # table = False  # Critical for inheritance
 
-    
+    id: UUID = Field(default_factory=uuid4, primary_key=True, index=True)
+    created_at: datetime = Field(default_factory=datetime.now, nullable=False,)
+    updated_at: datetime = Field(default_factory=datetime.now, nullable=False, sa_column_kwargs={"onupdate": datetime.utcnow})

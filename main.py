@@ -2,7 +2,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
 from dependencies.database import check_database_connection, engine
 from routers import router
-from exceptions import (http, lookup,value,generic, request)
+from exceptions import (http, lookup, value, generic, request)
+
 
 def init_app():
     """
@@ -28,8 +29,12 @@ def init_app():
     # Register exception handlers
     app.add_exception_handler(HTTPException, http)
     app.add_exception_handler(RequestValidationError, request)
-
+    app.add_exception_handler(ValueError, value)
+    app.add_exception_handler(LookupError, lookup)
+    app.add_exception_handler(Exception, generic)
     app.include_router(router.api_router)
+
     return app
+
 
 app = init_app()

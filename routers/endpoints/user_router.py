@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from dependencies.database import get_db
 from schemas.response_sch import SuccessResponse as Response
-from schemas.user_sch import UserCreate, UserUpdate
+from schemas.user_sch import UserCreate
 from services.user_srv import UserService
 
 router = APIRouter()
@@ -35,6 +35,7 @@ async def get_all_users(
     result = await service.get_all(skip, limit, filters)
     return Response(data=result, message="Users retrieved successfully")
 
+
 @router.get("/{id}", response_model=Response, status_code=status.HTTP_200_OK)
 async def get_user_by_id(
         id: UUID,
@@ -45,12 +46,14 @@ async def get_user_by_id(
     result = await service.get_by_id(id)
     return Response(data=result, message="User retrieved successfully")
 
+
 @router.post("/{id}", response_model=Response, status_code=status.HTTP_200_OK)
 async def update_user(
         id: UUID,
-        data: UserUpdate,
+        data: UserCreate,
         db: AsyncSession = Depends(get_db)
 ):
+    # TO DO : VALIDATION WONT WORK
     """Update an existing User with the given data."""
     service = UserService(db)
     result = await service.update_user(id, data)

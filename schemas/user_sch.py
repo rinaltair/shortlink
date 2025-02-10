@@ -5,9 +5,9 @@ from pydantic import BaseModel, Field, EmailStr
 
 class UserCreate(BaseModel):
     # What user can create
-    username: str = Field(None, min_length=4, max_length=100)
-    email: EmailStr = Field(None, max_length=254)
-    password: str = Field(None, min_length=8)
+    username: str = Field(..., min_length=4, max_length=100)
+    email: EmailStr = Field(..., max_length=254)
+    password: str = Field(..., min_length=8)
 
 
 class UserUpdate(BaseModel):

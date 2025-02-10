@@ -18,7 +18,8 @@ class UserService:
     async def create_user(self, data: UserCreate):
         """Create a new User."""
         try:
-            data = await self._unique_handler(data)
+            data.username = await self._unique_username_handler(data)
+            data.email = await self._unique_email_handler(data)
             data.password = Password.hash_pwd(data.password)
             result = await self.reps.create({
                 "username": data.username,
@@ -28,7 +29,7 @@ class UserService:
             logger.info(f"Created username: {data.username} with email: {data.email}")
             return await self._build_response(result)
         except Exception as e:
-            logger.error(f"Failed to create shortlink: {e}")
+            logger.error(f"Failed to create user: {e}")
             raise
 
     async def get_all(self, skip: int = 0, limit: int = 100, filters: dict = None):
@@ -37,6 +38,7 @@ class UserService:
             result = await self.reps.get_all(skip, limit, filters)
             return result
         except Exception as e:
+            logger.error(f"Failed to get users: {e}")
             raise e
 
     async def get_by_id(self, id: UUID):
@@ -47,16 +49,21 @@ class UserService:
                 raise LookupError('User not found')
             return await self._build_response(result)
         except Exception as e:
+            logger.error(f"Failed to get user: {e}")
             raise
 
 
-    async def _unique_handler(self, data: UserCreate) -> UserCreate:
+    async def _unique_email_handler(self, email: EmailStr | str) -> str:
         """Check if the username or email already exists in the database."""
-        if await self.reps.get_by_username(data.username):
-            raise ValueError('Username already exists')
-        if await self.reps.get_by_email(data.email):
+        if await self.reps.get_by_email(email):
             raise ValueError('Email already exists')
-        return data
+        return email
+
+    async def _unique_username_handler(self, username: str) -> str:
+        """Check if the username or email already exists in the database."""
+        if await self.reps.get_by_username(username):
+            raise ValueError('Username already exists')
+        return username
 
     async def _build_response(self, user: User) -> UserResponse:
         return UserResponse(

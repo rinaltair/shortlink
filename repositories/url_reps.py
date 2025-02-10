@@ -11,6 +11,7 @@ from utils.shortlink import Shortlink
 class UrlRepositories(BaseRepository[Url, UrlCreate, UrlUpdate]):
     def __init__(self, session):
         self.session = session
+        self.model = Url
 
     async def shortlink_exist(self, shortlink: str) -> bool:
         """

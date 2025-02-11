@@ -20,6 +20,11 @@ class Settings(BaseSettings):
     URL_BASE: str
     RESTRICTED_SHORTLINK: List[str] = ['api', 'auth']
 
+    # JWT Configuration
+    JWT_SECRET_KEY: str
+    JWT_ALGORITHM: str
+    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+
     @field_validator("URL_BASE")
     # Ensuring the url base always ends with "/"
     def validate_url_base(cls, value):

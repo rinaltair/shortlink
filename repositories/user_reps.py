@@ -9,7 +9,7 @@ from repositories import BaseRepository
 from schemas.user_sch import UserCreate, UserUpdate
 
 
-class UserRepositories(BaseRepository[User, UserCreate, UserUpdate], ABC):
+class UserRepositories(BaseRepository[User, UserCreate, UserUpdate]):
     def __init__(self, session):
         self.session = session
         self.model = User

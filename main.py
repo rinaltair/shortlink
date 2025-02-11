@@ -1,8 +1,10 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
+from starlette.authentication import AuthenticationError
+
 from dependencies.database import check_database_connection, engine
+from exceptions import (http, lookup, value, generic, request, auth)
 from routers import router
-from exceptions import (http, lookup, value, generic, request)
 
 
 def init_app():
@@ -32,6 +34,7 @@ def init_app():
     app.add_exception_handler(ValueError, value)
     app.add_exception_handler(LookupError, lookup)
     app.add_exception_handler(Exception, generic)
+    app.add_exception_handler(AuthenticationError, auth)
     app.include_router(router.api_router)
 
     return app

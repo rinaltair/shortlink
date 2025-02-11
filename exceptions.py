@@ -1,6 +1,7 @@
 from fastapi import Request, HTTPException, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from starlette.authentication import AuthenticationError
 
 from schemas.response_sch import ErrorResponse
 
@@ -48,5 +49,13 @@ async def request(request: Request, exc: RequestValidationError):
         status_code=status.HTTP_400_BAD_REQUEST,
         content=ErrorResponse(
             message=first_error_msg,
+        ).dict()
+    )
+
+async def auth(request: Request, exc: AuthenticationError):
+    return JSONResponse(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        content=ErrorResponse(
+            message="Authentication failed",
         ).dict()
     )

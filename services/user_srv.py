@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from models import User
 from repositories import UserRepositories
 from schemas.user_sch import UserCreate, UserResponse, UserUpdate
-from utils.hash import Hash
+from utils import hash
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ class UserService:
         try:
             data.username = await self._unique_username_handler(data.username)
             data.email = await self._unique_email_handler(data.email)
-            data.password = Hash.get_hash_password(data.password)
+            data.password = hash.get_hash_password(data.password)
             result = await self.reps.create({
                 "username": data.username,
                 "email": data.email,
@@ -65,7 +65,7 @@ class UserService:
             user.email = user.email \
                 if user.email == data.email \
                 else await self._unique_email_handler(data.email)
-            user.password_hash = Hash.get_hash_password(data.password)
+            user.password_hash = hash.get_hash_password(data.password)
             await self.reps.update(id, user)
             return await self._build_response(user)
         except Exception as e:

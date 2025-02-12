@@ -7,9 +7,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from dependencies.database import get_db
+from models import User
 from schemas.token import Token
 from services.auth_srv import AuthService
-from utils.jwt import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
+from utils.jwt import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token, get_current_active_user
 
 router = APIRouter()
 
@@ -26,3 +27,4 @@ async def login_for_access_token(
                             headers={"WWW-Authenticate": "Bearer"})
     access_token = await service.access_token(user)
     return Token(access_token=access_token, token_type="bearer")
+

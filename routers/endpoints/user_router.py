@@ -1,13 +1,15 @@
-from typing import Optional
+from typing import Optional, Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Query, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from dependencies.database import get_db
+from models import User
 from schemas.response_sch import SuccessResponse as Response
-from schemas.user_sch import UserCreate
+from schemas.user_sch import UserCreate, UserResponse
 from services.user_srv import UserService
+from utils.jwt import get_current_active_user
 
 router = APIRouter()
 
@@ -45,6 +47,21 @@ async def get_user_by_id(
     service = UserService(db)
     result = await service.get_by_id(id)
     return Response(data=result, message="User retrieved successfully")
+
+
+# TODO : Test the user/me for jwt token
+@router.get("/users/me/", response_model=UserResponse)
+async def read_users_me(
+        current_user: Annotated[User, Depends(get_current_active_user)],
+):
+    return current_user
+
+
+@router.get("/users/me/items/")
+async def read_own_items(
+        current_user: Annotated[User, Depends(get_current_active_user)],
+):
+    return [{"item_id": "Foo", "owner": current_user.username}]
 
 
 @router.post("/{id}", response_model=Response, status_code=status.HTTP_200_OK)

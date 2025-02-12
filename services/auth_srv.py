@@ -20,13 +20,14 @@ class AuthService:
         self.hash = hash
 
     async def access_token(self, user: User):
+        """Generate an access token for a given user."""
         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = await create_access_token(
             data={"sub": user.username}, expires_delta=access_token_expires)
         return access_token
 
-
     async def authenticate_user(self, username: str, password: str):
+        """Authenticate a user by their username and password. """
         try:
             user = await self.user_repo.get_by_username(username)
             if user is None:

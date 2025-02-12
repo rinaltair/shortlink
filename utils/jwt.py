@@ -23,6 +23,7 @@ jwt = JWT()
 
 
 async def create_access_token(data: dict, expires_delta: timedelta | None) -> str:
+    """Create a new access token for a given data and expiration delta"""
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
@@ -36,6 +37,7 @@ async def create_access_token(data: dict, expires_delta: timedelta | None) -> st
 
 
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
+    """Get the current user from the access token"""
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -58,6 +60,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
 async def get_current_active_user(
         current_user: Annotated[User, Depends(get_current_user)],
 ):
+    """Check if the current user is active"""
     if current_user.is_active is False:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user

@@ -1,4 +1,4 @@
-from typing import Optional, Annotated
+from typing import Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Query, Depends, status

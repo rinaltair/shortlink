@@ -41,7 +41,7 @@ async def get_all_users(
 @router.get("/{id}", response_model=Response, status_code=status.HTTP_200_OK)
 async def get_user_by_id(
         id: UUID,
-        db: AsyncSession = Depends(get_db)
+        db: AsyncSession = Depends(get_db),
 ):
     """Get the full data of a User based on the given ID."""
     service = UserService(db)
@@ -52,14 +52,14 @@ async def get_user_by_id(
 # TODO : Test the user/me for jwt token
 @router.get("/users/me/", response_model=UserResponse)
 async def read_users_me(
-        current_user: Annotated[User, Depends(get_current_active_user)],
+        current_user: User = Depends(get_current_active_user),
 ):
     return current_user
 
 
 @router.get("/users/me/items/")
 async def read_own_items(
-        current_user: Annotated[User, Depends(get_current_active_user)],
+        current_user: User = Depends(get_current_active_user),
 ):
     return [{"item_id": "Foo", "owner": current_user.username}]
 

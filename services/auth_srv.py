@@ -9,7 +9,9 @@ from starlette.authentication import AuthenticationError
 from models import User
 from repositories import UserRepositories
 from utils import hash
-from utils.jwt import ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token
+from utils.jwtmanager import JWTManager as jwt
+from configs.settings import settings
+
 
 logger = logging.getLogger(__name__)
 
@@ -17,12 +19,13 @@ logger = logging.getLogger(__name__)
 class AuthService:
     def __init__(self,  session: AsyncSession):
         self.user_repo = UserRepositories(session)
+        self.access_token_expire = settings.JWT_ACCESS_TOKEN_EXPIRE_MINUTES
         self.hash = hash
 
     async def access_token(self, user: User):
         """Generate an access token for a given user."""
-        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-        access_token = await create_access_token(
+        access_token_expires = timedelta(minutes=self.access_token_expire)
+        access_token = await jwt().create_access_token(
             data={"sub": user.username}, expires_delta=access_token_expires)
         return access_token
 

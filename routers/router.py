@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 from fastapi.params import Depends
 
-from utils.jwt import get_current_user
 from .endpoints import url, redirect, user, auth
+from dependencies.auth import get_current_user
 
 api_router = APIRouter()  # dependencies=[Depends(Permission().is_allowed_user)])
 

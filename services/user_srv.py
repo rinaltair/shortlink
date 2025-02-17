@@ -1,5 +1,6 @@
 import logging
 from uuid import UUID
+from fastapi.params import Depends
 
 from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -8,6 +9,7 @@ from models import User
 from repositories import UserRepositories
 from schemas.user_sch import UserCreate, UserResponse, UserUpdate
 from utils import hash
+from dependencies.auth import get_current_user
 
 logger = logging.getLogger(__name__)
 

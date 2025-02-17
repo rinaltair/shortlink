@@ -1,6 +1,5 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
-from fastapi.security import OAuth2PasswordBearer
 from starlette.authentication import AuthenticationError
 
 from dependencies.database import check_database_connection, engine

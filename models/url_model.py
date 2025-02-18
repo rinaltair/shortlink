@@ -1,8 +1,12 @@
 from sqlmodel import SQLModel, Field, Relationship
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 from sqlalchemy import Text
+from uuid import UUID
 
 from .base_model import Base
+
+if TYPE_CHECKING:
+    from .user_model import User
 
 class UrlBase(SQLModel):
     # Base Model is where user can tinkered with
@@ -16,4 +20,6 @@ class UrlFull(UrlBase, Base):
     is_active: bool = Field(default=True)
 
 class Url(UrlFull, table=True):
-    pass
+    user_id: UUID = Field(default=None, foreign_key="user.id")
+    user: 'User' = Relationship(back_populates='urls')
+    

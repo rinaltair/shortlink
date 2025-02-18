@@ -1,9 +1,17 @@
 from sqlmodel import SQLModel, Field, Relationship
 from sqlmodel import Field
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
 from .base_model import Base
 
+
+if TYPE_CHECKING:
+    from .url_model import Url
+
+# class UserRole(str, Enum):
+#     user = "user"
+#     admin = "admin"
+#     moderator = "moderator"
 
 class UserBase(SQLModel):
     # Base Model is where user can tinkered with
@@ -18,5 +26,6 @@ class UserFull(UserBase, Base):
     password_hash: Optional[str] = Field(default=None, nullable=False)
     is_active: Optional[bool] = Field(default=True, nullable=False)
 
+
 class User(UserFull, table=True):
-    pass
+    urls: list['Url'] = Relationship(back_populates="user")

@@ -4,7 +4,7 @@ from uuid import UUID
 from fastapi import APIRouter, Query, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from dependencies.auth import get_current_active_user
+from dependencies.auth import auth_active
 from dependencies.database import get_db
 from models import User
 from schemas.response_sch import SuccessResponse as Response
@@ -53,7 +53,7 @@ async def get_user_by_id(
 @router.get("/users/me/", response_model=Response, status_code=status.HTTP_200_OK)
 async def read_users_me(
         db: AsyncSession = Depends(get_db),
-        current_user: User = Depends(get_current_active_user),
+        current_user: User = Depends(auth_active),
 ):
     service = UserService(db)
     current_user = await service._build_response(current_user)

@@ -37,7 +37,7 @@ async def get_current_user(
         # logger.error("Failed to get the current user")
         # raise credentials_exception
 
-async def get_current_active_user(
+async def auth_active(
         current_user: User =  Depends(get_current_user)
 ) -> UserResponse:
     """Check if the current user is active"""
@@ -47,18 +47,18 @@ async def get_current_active_user(
 
 # TO DO: Add the role check
 
-# async def get_current_active_admin(        
-#         current_user: User =  Depends(get_current_active)
-# ) -> UserResponse:
-#     """Check if the current user is active"""
-#     if current_user.rule is not 'admin':
-#         raise HTTPException(status_code=400, detail="Inactive user")
-#     return current_user  
+async def auth_admin(        
+        current_user: User =  Depends(auth_active)
+) -> UserResponse:
+    """Check if the current user is active"""
+    if current_user.rule is not 'admin':
+        raise HTTPException(status_code=400, detail="Inactive user")
+    return current_user  
 
-# async def get_current_active_user(
-#         current_user: User =  Depends(get_current_active)
-# ) -> UserResponse:
-#     """Check if the current user is active"""
-#     if current_user.is_active is False:
-#         raise HTTPException(status_code=400, detail="Inactive user")
-#     return current_user   
+async def auth_user(
+        current_user: User =  Depends(auth_active)
+) -> UserResponse:
+    """Check if the current user is active"""
+    if current_user.is_active is False:
+        raise HTTPException(status_code=400, detail="Inactive user")
+    return current_user   

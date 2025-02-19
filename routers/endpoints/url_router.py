@@ -30,11 +30,12 @@ async def get_all_urls(
     skip: int = 0,
     limit: int = 100,
     filters: Optional[str] = Query(None),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(auth_user)
 ):
     """Retrieve a paginated list of URLs, optionally filtered."""
     service = UrlService(db)
-    result = await service.get_all(skip, limit, filters)
+    result = await service.get_all(skip, limit, filters, user)
     return Response(data=result, message="Shortlinks retrieved successfully")
 
 @router.get("/{id}", response_model=Response, status_code=status.HTTP_200_OK)

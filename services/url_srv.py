@@ -34,9 +34,16 @@ class UrlService:
             logger.error(f"Failed to create shortlink: {e}")
             raise
 
-    async def get_all(self, skip: int = 0, limit: int = 100, filters: dict = None) -> List[UrlResponse]:
+    async def get_all(self, skip: int = 0, limit: int = 100, filters: dict = None, user: User = None) -> List[UrlResponse]:
         """Retrieve a paginated list of URLs, optionally filtered."""
         try:
+            # Initialize filters if None
+            filters = filters or {}
+
+            # Add user-specific filtering for non-admin users
+            if user and user.role != "admin":
+                filters["user_id"] = user.id
+
             result = await self.reps.get_all(skip, limit, filters)
             return [ await self._build_response(url) for url in result["items"]]
         except Exception as e:

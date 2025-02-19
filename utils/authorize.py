@@ -15,10 +15,10 @@ async def authorize_url(
     url = await UrlRepositories(db).get(id)
     if not url: raise LookupError('Shortlink not found')
 
-    if user.role == "admin":
-        return id
-    if user.role == "user" and user.id == url.user_id:
-        return id
+    # if user.role == "admin":
+    #     return id
+    # if user.role == "user" and user.id == url.user_id:
+    #     return id
     
     if user.id == url.user_id:
         return id

@@ -5,7 +5,8 @@ from uuid import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi.responses import RedirectResponse
 
-from models import Url
+from utils.authorize import check_access
+from models import Url, User
 from repositories import UrlRepositories
 from schemas.url_sch import UrlCreate, UrlResponse, UrlUpdate
 from configs.settings import settings
@@ -18,14 +19,15 @@ class UrlService:
         self.reps = UrlRepositories(session)
         self.max_retries = 4
 
-    async def create_shortlink(self, data: UrlCreate) -> UrlResponse:
+    async def create_shortlink(self, data: UrlCreate, user: User) -> UrlResponse:
         """Create a new shortlink for a given URL."""
         try:
             data.shortlink = await self._shortlink_handler(data.shortlink)
             result = await self.reps.create({
                 "original_url": str(data.original_url),
                 "shortlink": data.shortlink,
-                "title": data.title
+                "title": data.title,
+                "user_id": user.id
             })
             logger.info(f"Created shortlink: {data.shortlink} for URL: {data.original_url}")
             return await self._build_response(result)
@@ -66,6 +68,8 @@ class UrlService:
     async def update(self, id: UUID, data: UrlUpdate) -> UrlResponse:
         """Update an existing shortlink with the given data."""
         try:
+            result = await self.reps.get(id)
+            if not result: raise LookupError('Shortlink not found')
             updated = await self.reps.update(id, data)
             return  await self._build_response(updated)
         except Exception as e:

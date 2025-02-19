@@ -30,6 +30,8 @@ def init_app():
 
     # Register exception handlers
     app.add_middleware(ExceptionMiddleware)
+
+    # Include the routers
     app.include_router(router.api_router)
 
     return app

@@ -3,7 +3,7 @@ from fastapi.exceptions import RequestValidationError
 from starlette.authentication import AuthenticationError
 
 from dependencies.database import check_database_connection, engine
-from exceptions import (http, lookup, value, generic, request, auth)
+from exceptions import ExceptionMiddleware
 from routers import router
 
 
@@ -29,12 +29,7 @@ def init_app():
         await engine.dispose()
 
     # Register exception handlers
-    app.add_exception_handler(HTTPException, http)
-    app.add_exception_handler(RequestValidationError, request)
-    app.add_exception_handler(ValueError, value)
-    app.add_exception_handler(LookupError, lookup)
-    app.add_exception_handler(Exception, generic)
-    app.add_exception_handler(AuthenticationError, auth)
+    app.add_middleware(ExceptionMiddleware)
     app.include_router(router.api_router)
 
     return app

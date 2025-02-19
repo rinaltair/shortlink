@@ -10,7 +10,7 @@ from models.user_model import User
 from services.url_srv import UrlService
 from schemas.url_sch import UrlCreate, UrlUpdate
 from schemas.response_sch import SuccessResponse as Response
-
+from utils.authorize import authorize_url
 
 router = APIRouter()
 
@@ -39,7 +39,7 @@ async def get_all_urls(
 
 @router.get("/{id}", response_model=Response, status_code=status.HTTP_200_OK)
 async def get_url_by_id(
-    id: UUID,
+    id: UUID = Depends(authorize_url),
     db: AsyncSession = Depends(get_db),
 ):
     """Get the full data of a shortlink based on the given ID."""
@@ -49,8 +49,8 @@ async def get_url_by_id(
 
 @router.put("/{id}", response_model=Response, status_code=status.HTTP_200_OK)
 async def update_url(
-    id: UUID,
     data: UrlUpdate,
+    id: UUID = Depends(authorize_url),
     db: AsyncSession = Depends(get_db),
 ):
     """Update an existing shortlink with the given data."""
@@ -60,7 +60,7 @@ async def update_url(
 
 @router.post("/delete",  status_code=status.HTTP_204_NO_CONTENT)
 async def delete_url(
-    id: UUID,
+    id: UUID = Depends(authorize_url),
     db: AsyncSession = Depends(get_db),
 ):
     """Delete a shortlink based on the given ID."""

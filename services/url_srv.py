@@ -5,7 +5,6 @@ from uuid import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi.responses import RedirectResponse
 
-from utils.authorize import check_access
 from models import Url, User
 from repositories import UrlRepositories
 from schemas.url_sch import UrlCreate, UrlResponse, UrlUpdate

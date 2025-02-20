@@ -4,7 +4,7 @@ from uuid import UUID
 
 from dependencies.database import get_db
 from dependencies.auth import auth_user
-from models.user_model import User
+from models.user_model import User, UserRole
 from repositories import UrlRepositories
 
 async def authorize_url(
@@ -15,12 +15,9 @@ async def authorize_url(
     url = await UrlRepositories(db).get(id)
     if not url: raise LookupError('Shortlink not found')
 
-    # if user.role == "admin":
-    #     return id
-    # if user.role == "user" and user.id == url.user_id:
-    #     return id
-    
-    if user.id == url.user_id:
+    if user.role == UserRole.admin:
+        return id
+    if user.role == UserRole.user and user.id == url.user_id:
         return id
 
     raise PermissionError("You are not authorized to perform this action")

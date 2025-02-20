@@ -4,11 +4,11 @@ from uuid import UUID
 from fastapi import APIRouter, Query, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from dependencies.auth import auth_active
+from dependencies.auth import auth_admin, auth_active
 from dependencies.database import get_db
 from models import User
 from schemas.response_sch import SuccessResponse as Response
-from schemas.user_sch import UserCreate, UserResponse
+from schemas.user_sch import UserCreate
 from services.user_srv import UserService
 
 router = APIRouter()
@@ -17,7 +17,8 @@ router = APIRouter()
 @router.post("/", response_model=Response, status_code=status.HTTP_201_CREATED)
 async def create_user(
         data: UserCreate,
-        db: AsyncSession = Depends(get_db)
+        db: AsyncSession = Depends(get_db),
+        _: User = Depends(auth_admin)
 ):
     """Create a new User."""
     service = UserService(db)
@@ -30,7 +31,8 @@ async def get_all_users(
         skip: int = 0,
         limit: int = 100,
         filters: Optional[str] = Query(None),
-        db: AsyncSession = Depends(get_db)
+        db: AsyncSession = Depends(get_db),
+        _: User = Depends(auth_admin)
 ):
     """Retrieve a paginated list of Users, optionally filtered."""
     service = UserService(db)
@@ -42,6 +44,7 @@ async def get_all_users(
 async def get_user_by_id(
         id: UUID,
         db: AsyncSession = Depends(get_db),
+        _: User = Depends(auth_admin)
 ):
     """Get the full data of a User based on the given ID."""
     service = UserService(db)
@@ -64,7 +67,8 @@ async def read_users_me(
 async def update_user(
         id: UUID,
         data: UserCreate,
-        db: AsyncSession = Depends(get_db)
+        db: AsyncSession = Depends(get_db),
+        _: User = Depends(auth_admin)
 ):
     # TO DO : VALIDATION WONT WORK
     """Update an existing User with the given data."""
@@ -76,7 +80,8 @@ async def update_user(
 @router.post("/{id}/delete", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_url(
         id: UUID,
-        db: AsyncSession = Depends(get_db)
+        db: AsyncSession = Depends(get_db),
+        _: User = Depends(auth_admin)
 ):
     """Delete a shortlink based on the given ID."""
     service = UserService(db)

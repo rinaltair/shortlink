@@ -5,7 +5,7 @@ from starlette.authentication import AuthenticationError
 from dependencies.database import check_database_connection, engine
 from exceptions import ExceptionMiddleware
 from routers import router
-
+from utils.seed import seed_db
 
 def init_app():
     """
@@ -23,6 +23,7 @@ def init_app():
     @app.on_event('startup')
     async def startup():
         await check_database_connection(engine)
+        await seed_db()
 
     @app.on_event('shutdown')
     async def shutdown():

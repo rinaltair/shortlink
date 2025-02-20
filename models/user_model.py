@@ -1,3 +1,4 @@
+from enum import Enum
 from sqlmodel import SQLModel, Field, Relationship
 from sqlmodel import Field
 from typing import Optional, TYPE_CHECKING
@@ -8,10 +9,10 @@ from .base_model import Base
 if TYPE_CHECKING:
     from .url_model import Url
 
-# class UserRole(str, Enum):
-#     user = "user"
-#     admin = "admin"
-#     moderator = "moderator"
+class UserRole(str, Enum):
+    user = "user"
+    admin = "admin"
+    moderator = "moderator"
 
 class UserBase(SQLModel):
     # Base Model is where user can tinkered with
@@ -22,7 +23,7 @@ class UserBase(SQLModel):
 
 class UserFull(UserBase, Base):
     # Manage by the systems, like relationship
-    role: Optional[str] = Field(default=None, nullable=True)
+    role: Optional[str] = Field(default=UserRole.user, nullable=False)
     password_hash: Optional[str] = Field(default=None, nullable=False)
     is_active: Optional[bool] = Field(default=True, nullable=False)
 

@@ -2,6 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel, Field, EmailStr
 
+from models.user_model import UserRole
 
 class UserCreate(BaseModel):
     # What user can create
@@ -25,7 +26,10 @@ class UserResponse(BaseModel):
     username: str
     email: str
     # password: str
-    role: str
+    role: UserRole
     is_active: bool
     created_at: str
     updated_at: str
+
+    class Config:
+        user_enum_values = True

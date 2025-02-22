@@ -8,7 +8,7 @@ from services.url_srv import UrlService
 from schemas.url_sch import UrlCreate, UrlResponse, UrlUpdate
 from schemas.response_sch import SuccessResponse as Response, ErrorResponse as Error
 from dependencies.database import get_db
-from fastapi.responses import JSONResponse
+from fastapi.responses import RedirectResponse
 
 
 router = APIRouter()
@@ -23,3 +23,7 @@ async def redirect_to_original_url(
     service = UrlService(db)
     result = await service.redirect(shortlink)
     return result
+
+@router.get("/")
+async def root():
+    return RedirectResponse(url="/api/docs")

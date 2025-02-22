@@ -57,3 +57,6 @@ async def auth_admin(current_user: User =  Depends(auth_active)) -> UserResponse
 
 async def auth_user(current_user: User =  Depends(auth_active)) -> UserResponse:
     await check_role(allowed_roles=[UserRole.user], current_user=current_user)
+
+async def auth_admin_or_user(current_user: User =  Depends(auth_active)) -> UserResponse:
+    await check_role(allowed_roles=[UserRole.admin, UserRole.user], current_user=current_user)

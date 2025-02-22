@@ -53,7 +53,7 @@ async def get_user_by_id(
 
 
 # TODO : Test the user/me for jwt token
-@router.get("/users/me/", response_model=Response, status_code=status.HTTP_200_OK)
+@router.get("/me/", response_model=Response, status_code=status.HTTP_200_OK)
 async def read_users_me(
         db: AsyncSession = Depends(get_db),
         current_user: User = Depends(auth_active),

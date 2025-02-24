@@ -11,10 +11,12 @@ from services.url_srv import UrlService
 from schemas.url_sch import UrlCreate, UrlUpdate
 from schemas.response_sch import SuccessResponse as Response
 from utils.authorize import authorize_url
+from utils.limiter import limiter
 
 router = APIRouter()
 
 @router.post("/", response_model=Response, status_code=status.HTTP_201_CREATED)
+@limiter.limit("30/hour")
 async def create_shortlink(
     data: UrlCreate,
     db: AsyncSession = Depends(get_db),

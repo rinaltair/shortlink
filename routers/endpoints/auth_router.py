@@ -7,10 +7,12 @@ from dependencies.database import get_db
 from models import User
 from schemas.token import Token
 from services.auth_srv import AuthService
+from utils.limiter import limiter
 
 router = APIRouter()
 
 @router.post("/token")
+@limiter.limit("5/minute")
 async def login_for_access_token(
         data: OAuth2PasswordRequestForm = Depends(),
         db: AsyncSession = Depends(get_db)

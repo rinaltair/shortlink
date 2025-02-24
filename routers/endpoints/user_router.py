@@ -10,11 +10,13 @@ from models import User
 from schemas.response_sch import SuccessResponse as Response
 from schemas.user_sch import UserCreate
 from services.user_srv import UserService
+from utils.limiter import limiter
 
 router = APIRouter()
 
 
 @router.post("/", response_model=Response, status_code=status.HTTP_201_CREATED)
+@limiter.limit("5/minute")
 async def create_user(
         data: UserCreate,
         db: AsyncSession = Depends(get_db),

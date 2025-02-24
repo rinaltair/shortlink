@@ -1,11 +1,12 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
-from starlette.authentication import AuthenticationError
+from slowapi import Limiter, _rate_limit_exceeded_handler
 
 from dependencies.database import check_database_connection, engine
 from exceptions import ExceptionMiddleware
 from routers import router
 from utils.seed import seed_db
+from utils.limiter import limiter, _rate_limit_exceeded_handler, RateLimitExceeded
 
 def init_app():
     """
@@ -29,8 +30,11 @@ def init_app():
     async def shutdown():
         await engine.dispose()
 
+    app.state.limiter = limiter
+
     # Register exception handlers
     app.add_middleware(ExceptionMiddleware)
+    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
     # Include the routers
     app.include_router(router.api_router)

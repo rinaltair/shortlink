@@ -4,7 +4,7 @@ from typing import Optional
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from dependencies.auth import auth_user
+from dependencies.auth import auth_user, auth_active
 from dependencies.database import get_db
 from models.user_model import User
 from services.url_srv import UrlService
@@ -55,6 +55,7 @@ async def update_url(
     data: UrlUpdate,
     id: UUID = Depends(authorize_url),
     db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(auth_active),
 ):
     """Update an existing shortlink with the given data."""
     service = UrlService(db)

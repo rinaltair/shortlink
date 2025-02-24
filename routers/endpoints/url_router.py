@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status, Query
+from fastapi import APIRouter, Depends, Request, status, Query
 from uuid import UUID
 from typing import Optional
 
@@ -18,6 +18,7 @@ router = APIRouter()
 @router.post("/", response_model=Response, status_code=status.HTTP_201_CREATED)
 @limiter.limit("30/hour")
 async def create_shortlink(
+    request: Request,
     data: UrlCreate,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(auth_user)

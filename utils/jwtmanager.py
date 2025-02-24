@@ -2,7 +2,7 @@ from datetime import timedelta, datetime, timezone
 
 from fastapi import HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from jwt import JWT, supported_key_types, AbstractJWKBase, PyJWTError
+from jwt import JWT, supported_key_types, AbstractJWKBase
 
 from configs.settings import settings
 from schemas.token import TokenData
@@ -61,7 +61,7 @@ class JWTManager():
             if username is None: raise Exception("Invalid token data")
             token_data = TokenData(username=username)
             return token_data
-        except PyJWTError as e:
+        except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail=f"Invalid token: {str(e)}"

@@ -1,7 +1,7 @@
 from typing import Optional
 from uuid import UUID
 
-from fastapi import APIRouter, Query, Depends, status
+from fastapi import APIRouter, Query, Depends, Request,status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from dependencies.auth import auth_admin, auth_active
@@ -18,6 +18,7 @@ router = APIRouter()
 @router.post("/", response_model=Response, status_code=status.HTTP_201_CREATED)
 @limiter.limit("5/minute")
 async def create_user(
+        request: Request,
         data: UserCreate,
         db: AsyncSession = Depends(get_db),
         _: User = Depends(auth_admin)

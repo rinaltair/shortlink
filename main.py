@@ -5,7 +5,6 @@ from slowapi.errors import RateLimitExceeded
 
 from dependencies.database import check_database_connection, engine
 from exceptions import ExceptionMiddleware
-from middlewares.async_cleanup_mid import AsyncCleanupMiddleware
 from routers import router
 from utils.seed import seed_db
 from utils.limiter import limiter
@@ -36,7 +35,6 @@ def init_app():
     app.state.limiter = limiter
 
     # Register exception handlers
-    app.add_middleware(AsyncCleanupMiddleware)
     app.add_middleware(ExceptionMiddleware)
     app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 

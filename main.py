@@ -31,7 +31,7 @@ def init_app():
     async def shutdown():
         await engine.dispose()
 
-    #initialize rate limiter
+    # Initialize rate limiter
     app.state.limiter = limiter
 
     # Register exception handlers
@@ -42,6 +42,5 @@ def init_app():
     app.include_router(router.api_router)
 
     return app
-
 
 app = init_app()

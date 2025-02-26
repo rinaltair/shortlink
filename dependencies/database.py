@@ -10,9 +10,9 @@ from configs.settings import settings
 engine = create_async_engine(
     settings.DB_CONFIG,
     echo=True,  # Log SQL queries (optional)
-    pool_size=20,  # Connection pool size
+    pool_size=5,  # Connection pool size
     pool_pre_ping=True,
-    max_overflow=50  # Max connections allowed beyond pool_size
+    max_overflow=10  # Max connections allowed beyond pool_size
 )
 
 AsyncSessionLocal = sessionmaker(

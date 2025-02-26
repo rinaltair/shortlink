@@ -87,9 +87,9 @@ async def run_migrations_online() -> None:
     connectable = create_async_engine(
         settings.DB_CONFIG,
         echo=True,  # Log SQL queries (optional)
-        pool_size=20,  # Connection pool size
+        pool_size=5,  # Connection pool size
         pool_pre_ping=True,
-        max_overflow=50  # Max connections allowed beyond pool_size
+        max_overflow=10  # Max connections allowed beyond pool_size
     )
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)

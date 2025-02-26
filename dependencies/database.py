@@ -2,6 +2,7 @@ import asyncio
 
 from sqlalchemy.exc import SQLAlchemyError
 from asyncio import TimeoutError
+from fastapi import Request
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, AsyncEngine
 from sqlalchemy.orm import sessionmaker
 
@@ -32,6 +33,10 @@ async def check_database_connection(engine: AsyncEngine) -> None:
         print(f"Database connection error: {e}")
         raise
 
-async def get_db():
+async def get_db(request: Request):
     async with AsyncSessionLocal() as session:
-        yield session
+        request.state.db = session
+        try:
+            yield session
+        finally:
+            await session.close()

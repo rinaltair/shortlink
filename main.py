@@ -1,5 +1,4 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.exceptions import RequestValidationError
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
@@ -8,8 +7,8 @@ from dependencies.database import check_database_connection, engine
 from exceptions import ExceptionMiddleware
 from middlewares.async_cleanup_mid import AsyncCleanupMiddleware
 from routers import router
-from utils.seed import seed_db
 from utils.limiter import limiter
+from utils.seed import seed_db
 
 def init_app():
     """
@@ -27,6 +26,7 @@ def init_app():
     origins = [
         "http://localhost",
         "http://localhost:8080",
+        "http://127.0.0.1:8080",
     ]
 
     app.add_middleware(
@@ -58,5 +58,6 @@ def init_app():
     app.include_router(router.api_router)
 
     return app
+
 
 app = init_app()

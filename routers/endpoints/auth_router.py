@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from dependencies.database import get_db
 from models import User
+from schemas.auth_sch import LoginRequest
 from schemas.token import Token
 from services.auth_srv import AuthService
 from utils.limiter import limiter
@@ -15,7 +15,7 @@ router = APIRouter()
 @limiter.limit("5/minute")
 async def login_for_access_token(
         request: Request,
-        data: OAuth2PasswordRequestForm = Depends(),
+        data : LoginRequest,
         db: AsyncSession = Depends(get_db)
 ) -> Token:
     service = AuthService(db)

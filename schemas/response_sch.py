@@ -9,5 +9,8 @@ class SuccessResponse(BaseModel):
     message: Optional[str]
 
 class ErrorResponse(BaseModel):
-    success: bool = False
-    message: str
+    type: str = "about:blank"
+    title: str
+    status: int
+    detail: str
+    instance: str = ""

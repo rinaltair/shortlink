@@ -24,9 +24,15 @@ def init_app():
     )
 
     origins = [
+        # LOCAL
         "http://localhost",
         "http://localhost:8080",
         "http://127.0.0.1:8080",
+
+        # DEPLOYEMENT
+        "https://fe-shortlink-kappa.vercel.app",
+        "https://fe-shortlink-rinals-projects.vercel.app",
+        "https://fe-shortlink-rinaltair-rinals-projects.vercel.app",
     ]
 
     app.add_middleware(

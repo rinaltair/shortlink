@@ -26,7 +26,12 @@ class AuthService:
         """Generate an access token for a given user."""
         access_token_expires = timedelta(minutes=self.access_token_expire)
         access_token = await jwt().create_access_token(
-            data={"sub": user.username}, expires_delta=access_token_expires)
+            data={
+                "username": user.username,
+                'email': user.email,
+                'role' : user.role
+            }, 
+            expires_delta=access_token_expires)
         return access_token
 
     async def authenticate_user(self, username: str, password: str):

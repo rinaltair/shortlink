@@ -55,8 +55,8 @@ class JWTManager():
                 require=["exp"],
                 verify_exp=True,
             )
-            username: str = payload.get("sub")
-            if username is None: raise Exception("Invalid token data: 'sub' claim is missing")
+            username: str = payload.get("username")
+            if username is None: raise Exception("Invalid token data: 'username' claim is missing")
             token_data = TokenData(username=username)
             return token_data
         except Exception as e:

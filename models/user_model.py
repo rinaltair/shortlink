@@ -9,10 +9,12 @@ from .base_model import Base
 if TYPE_CHECKING:
     from .url_model import Url
 
+
 class UserRole(str, Enum):
     user = "user"
     admin = "admin"
     moderator = "moderator"
+
 
 class UserBase(SQLModel):
     # Base Model is where user can tinkered with
@@ -26,7 +28,8 @@ class UserFull(UserBase, Base):
     role: Optional[str] = Field(default=UserRole.user, nullable=False)
     password_hash: Optional[str] = Field(default=None, nullable=False)
     is_active: Optional[bool] = Field(default=True, nullable=False)
+    is_verified: Optional[bool] = Field(default=False, nullable=False)
 
 
 class User(UserFull, table=True):
-    urls: list['Url'] = Relationship(back_populates="user")
+    urls: list["Url"] = Relationship(back_populates="user")
